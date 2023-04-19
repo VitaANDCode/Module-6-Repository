@@ -1,0 +1,58 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font-family: 'Caveat', cursive;
+}
+
+main {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+}
+
+.main-menu {
+	padding-top: 10vh;
+}
+
+.main-header {
+	text-align: center;
+	font-size: 64px;
+
+	color: white;
+	text-shadow: 16px 16px 16px #000;
+}
+
+.menu-list {
+	text-align: center;
+}
+
+li {
+	padding-top: 30px;
+}
+
+.menu-link {
+	text-decoration: none;
+	font-size: 48px;
+
+	color: white;
+	text-shadow: 16px 16px 16px #000;
+	transition: 0.2s linear;
+}
+
+.menu-link:hover {
+	text-shadow: 2px 2px 2px rgb(183, 0, 255);
+}
+
+.authors {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+}
+
+.authors-text {
+	color: white;
+	font-size: 24px;
+}
