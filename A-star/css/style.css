@@ -1,0 +1,14 @@
+body {
+
+    background-image: url("../../img/background.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.p {
+    font-family: 'Arial Narrow';
+    font-weight: bold;
+    font-size: 250%;
+    text-align: center;
+    margin-top: 2%;
+}
