@@ -14,7 +14,7 @@ main {
 }
 
 .main-menu {
-	padding-top: 10vh;
+	padding-top: 10%;
 }
 
 .main-header {
@@ -27,10 +27,6 @@ main {
 
 .menu-list {
 	text-align: center;
-}
-
-li {
-	padding-top: 30px;
 }
 
 .menu-link {
