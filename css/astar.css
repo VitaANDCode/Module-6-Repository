@@ -17,6 +17,10 @@ main {
 	position: fixed;
 }
 
+section {
+	padding-top: 4vh;
+}
+
 .main-header {
 	font-size: 64px;
 	text-align: center;
@@ -24,3 +28,35 @@ main {
 	text-shadow: 16px 16px 16px #000;
 }
 
+.buttons {
+	text-align: center;
+}
+
+label {
+	color: white;
+	font-size: 32px;
+}
+
+tr, td, table {
+	border: 3px solid purple;
+}
+
+table {
+	display: inline-block;
+}
+
+.table-map {
+	text-align: center;
+}
+
+td {
+	width: 6vh;
+	height: 6vh;
+	background-color: white;
+
+	transition: 0.2s linear;
+}
+
+td:hover {
+	border-color: red;
+}
