@@ -18,6 +18,17 @@ document.addEventListener('click', function(elem)
 		}
 		parrent.appendChild(table);
 	}
+	else if (elem.target.id == "crt_route") {
+		var openList = [];
+		var closedList = [];
+		openList.push(startNode);
+
+		while(openList.lenght != 0)
+		{
+
+		}
+		
+	}
 
 	if (elem.target.className == 'table-item' && buttonPaint == true) 
 	{
@@ -26,6 +37,10 @@ document.addEventListener('click', function(elem)
 
 	if (elem.target.className == 'table-item' && buttonStart == true) {
 		elem.target.setAttribute('style', 'background-color: blue');
+		var start_tr = $tr;
+		var start_td = $td;
+		console.log(start_tr);
+		console.log(start_td);
 	}
 
 	if (elem.target.className == 'table-item' && buttonStop == true) {
@@ -37,6 +52,8 @@ document.addEventListener('click', function(elem)
 		buttonPaint = false, buttonStart = false, buttonStop = false;
 	}
 });
+
+
 
 var buttonPaint = false;
 var buttonStart = false;
