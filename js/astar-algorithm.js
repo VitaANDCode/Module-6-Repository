@@ -25,7 +25,13 @@ document.addEventListener('click', function(elem)
 			}
 		}
 
+		if (isNaN(size) || !size) {
+			alert('Некорректный ввод!');
+			return;
+		}
+
 		var table = document.createElement('table');
+		var tableId = 1;
 		table.setAttribute('id', 'astar_table');
 		for (let i = 0; i < size; i++)
 		{
@@ -34,11 +40,15 @@ document.addEventListener('click', function(elem)
 				var td = document.createElement('td');
 				td.setAttribute("id", i*size+j);
 				td.className = 'table-item';
+				td.id = tableId;
+				td.setAttribute('style', 'background-color: white');
 				tr.appendChild(td);
+				tableId++;
 			}
 			table.appendChild(tr);
 		}
 		parrent.appendChild(table);
+		elem.target.setAttribute('disabled', '')
 	}
 	if (elem.target.className == 'table-item')
 	{
@@ -191,6 +201,21 @@ document.addEventListener('click', function(elem)
 	{
 		astar_table.remove();
 		buttonPaint = false, buttonStart = false, buttonStop = false;
+		buttonStart = 0;
+		buttonStop = 0;
+		document.querySelector('#crt_btn').removeAttribute('disabled');
+	}
+
+	else if (elem.target.className == 'table-item' && buttonClearDate == true) {
+		elem.target.setAttribute('style', 'background-color: white');
+
+		if (window.getComputedStyle(elem.target).getPropertyValue("background-color") == 'rgb(255, 0, 0)') {
+			counterStop--;
+		}
+
+		else if (window.getComputedStyle(elem.target).getPropertyValue("background-color") == 'rgb(0, 0, 255)') {
+			counterStart--;
+		}
 	}
 });
 
