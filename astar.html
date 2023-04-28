@@ -23,12 +23,12 @@
 			<section class="buttons">
 				<form>
 					<label for="size_table">Введите размер таблицы</label>
-					<input type="text" id="size_table" placeholder="Ввод">
+					<input type="number" id="size_table" placeholder="Ввод">
 					<input type="button" value="Создать таблицу" id="crt_btn">
-					<input type="button" value="Установить стартовую точку" onclick="buttonStart = true, buttonPaint = false, buttonStop = false">
-					<input type="button" value="Установить конечную точку" onclick="buttonStop = true, buttonPaint = false, buttonStart = false">
-					<input type="button" value="Поставить стенки" onclick="buttonPaint = true, buttonStart = false, buttonStop = false">
-					<input type="button" value="Построить маршрут" id = "crt_route" onclick="buttonPaint = true, buttonStart = false, buttonStop = false">
+					<input type="button" value="Установить стартовую точку" onclick="td_color = 1">
+					<input type="button" value="Установить конечную точку" onclick="td_color = 2">
+					<input type="button" value="Поставить стенки" onclick="td_color = 3">
+					<input type="button" value="Построить маршрут" id = "crt_route">
 					<input type="reset" value="Сбросить" id="reset_btn">
 			</form>
 			</section>
