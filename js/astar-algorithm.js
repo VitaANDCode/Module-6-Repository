@@ -9,6 +9,10 @@ var current_td = [];	//текущая клетка
 var xn, yn, xf, yf, x, y; // координаты начала, конца, курентовые координаты
 var start_id, finish_id;  // номер старта и конца
 
+var code_of_button = 0;
+var isThereStart = false;
+var isThereFinish = false;
+
 document.addEventListener('click', function(elem) 
 {
 	if (elem.target.id == 'crt_btn')
@@ -31,7 +35,6 @@ document.addEventListener('click', function(elem)
 		}
 
 		var table = document.createElement('table');
-		var tableId = 1;
 		table.setAttribute('id', 'astar_table');
 		for (let i = 0; i < size; i++)
 		{
@@ -40,10 +43,8 @@ document.addEventListener('click', function(elem)
 				var td = document.createElement('td');
 				td.setAttribute("id", i*size+j);
 				td.className = 'table-item';
-				td.id = tableId;
 				td.setAttribute('style', 'background-color: white');
 				tr.appendChild(td);
-				tableId++;
 			}
 			table.appendChild(tr);
 		}
@@ -52,27 +53,57 @@ document.addEventListener('click', function(elem)
 	}
 	if (elem.target.className == 'table-item')
 	{
-		if (td_color == 3) 
+		if (code_of_button == 3) 
 		{
 			elem.target.setAttribute('style', 'background-color: purple');
 			table_matrix[Math.floor(elem.target.id/size)][elem.target.id % size] = "S";	// стена
+
+			if (window.getComputedStyle(elem.target).getPropertyValue("background-color") == 'rgb(255, 0, 0)') {
+				isThereFinish = false;
+			}
+	
+			else if (window.getComputedStyle(elem.target).getPropertyValue("background-color") == 'rgb(0, 0, 255)') {
+				isThereStart = false;
+			}
 		}
 
-		else if (td_color == 1)
+		else if (code_of_button == 1 && isThereStart == false)
 		{
 			elem.target.setAttribute('style', 'background-color: blue');
 			table_matrix[Math.floor(elem.target.id/size)][elem.target.id % size] = "N";	// начало
 			start_id = elem.target.id;
+			isThereStart = true;
+
+			if (window.getComputedStyle(elem.target).getPropertyValue("background-color") == 'rgb(255, 0, 0)') {
+				isThereFinish = false;
+			}
 		}
 
-		else if (td_color == 2)
+		else if (code_of_button == 2 && isThereFinish == false)
 		{
 			elem.target.setAttribute('style', 'background-color: red');
 			table_matrix[Math.floor(elem.target.id/size)][elem.target.id % size] = "K";	// конец
 			finish_id = elem.target.id;
+			isThereFinish = true;
+
+			if (window.getComputedStyle(elem.target).getPropertyValue("background-color") == 'rgb(0, 0, 255)') {
+				isThereStart = false;
+			}
 		}
-	}
+
+		else if (code_of_button == 4)
+		{
+			if (window.getComputedStyle(elem.target).getPropertyValue("background-color") == 'rgb(255, 0, 0)') {
+				isThereFinish = false;
+			}
 	
+			else if (window.getComputedStyle(elem.target).getPropertyValue("background-color") == 'rgb(0, 0, 255)') {
+				isThereStart = false;
+			}
+	
+			elem.target.setAttribute('style', 'background-color: white');
+		}
+	}	
 
 	if (elem.target.id == 'crt_route')	// если нажали "построить маршрут"
 	{
@@ -197,26 +228,10 @@ document.addEventListener('click', function(elem)
 		}, 150);
 	}
 
-	if (elem.target.id == 'reset_btn')
+	if (elem.target.id == 'reset_table')
 	{
 		astar_table.remove();
-		buttonPaint = false, buttonStart = false, buttonStop = false;
-		buttonStart = 0;
-		buttonStop = 0;
 		document.querySelector('#crt_btn').removeAttribute('disabled');
 	}
 
-	else if (elem.target.className == 'table-item' && buttonClearDate == true) {
-		elem.target.setAttribute('style', 'background-color: white');
-
-		if (window.getComputedStyle(elem.target).getPropertyValue("background-color") == 'rgb(255, 0, 0)') {
-			counterStop--;
-		}
-
-		else if (window.getComputedStyle(elem.target).getPropertyValue("background-color") == 'rgb(0, 0, 255)') {
-			counterStart--;
-		}
-	}
 });
-
-var td_color = 0;

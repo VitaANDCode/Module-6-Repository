@@ -25,11 +25,12 @@
 					<label for="size_table">Введите размер таблицы</label>
 					<input type="number" id="size_table" placeholder="Ввод">
 					<input type="button" value="Создать таблицу" id="crt_btn">
-					<input type="button" value="Установить стартовую точку" onclick="td_color = 1">
-					<input type="button" value="Установить конечную точку" onclick="td_color = 2">
-					<input type="button" value="Поставить стенки" onclick="td_color = 3">
+					<input type="button" value="Установить стартовую точку" onclick="code_of_button = 1">
+					<input type="button" value="Установить конечную точку" onclick="code_of_button = 2">
+					<input type="button" value="Поставить стенки" onclick="code_of_button = 3">
 					<input type="button" value="Построить маршрут" id = "crt_route">
-					<input type="reset" value="Сбросить" id="reset_btn">
+					<input type="button" value="Очистить ячейку" id="reset_td" onclick="code_of_button = 4">
+					<input type="reset" value="Сбросить" id="reset_table">
 			</form>
 			</section>
 			<section class="table-map"></section>
