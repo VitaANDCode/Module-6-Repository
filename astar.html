@@ -28,6 +28,8 @@
 					<input type="button" value="Установить стартовую точку" onclick="buttonStart = true, buttonPaint = false, buttonStop = false">
 					<input type="button" value="Установить конечную точку" onclick="buttonStop = true, buttonPaint = false, buttonStart = false">
 					<input type="button" value="Поставить стенки" onclick="buttonPaint = true, buttonStart = false, buttonStop = false">
+					<input type="button" value="Отчистить клетки" id="reset_td" onclick="buttonPaint = false, buttonStart = false, buttonStop = false, buttonClearDate = true" >
+					<input type="button" value="Найти путь" id="search_path">
 					<input type="reset" value="Сбросить" id="reset_btn">
 			</form>
 			</section>
