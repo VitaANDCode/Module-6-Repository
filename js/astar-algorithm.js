@@ -77,96 +77,114 @@ document.addEventListener('click', function(elem)
 		xf = Math.floor(finish_id/size);
 		yf = finish_id % size;
 
-		openList.push([xn, yn, Math.abs(xn - xf)+Math.abs(yn - yf)]);	// заносим в открытый список стартовую точку
 		current_td = [xn, yn, Math.abs(xn - xf)+Math.abs(yn - yf)];		// рассматриваемая ячейка
-		while (!(openList.length == 0 || (current_td[0] == xf && current_td[1] == yf)))		// пока список не пуст или мы не пришли к финишу
-		{
-			x = current_td[0];	// координаты рассматриваемой точки
-			y = current_td[1];
-			// далее смотрим соседей и занесём в открытый список если там не стена или он не в другом списке
-			if ((size > x - 1 && x-1 >= 0) && table_matrix[x - 1][y] != "S" && closedList.indexOf((x-1)*size+y) == -1)
-			{
-				let sum = current_td[2] + 10 + Math.abs(x - 1 - xf)+Math.abs(y - yf);
-				openList.push([x - 1, y, sum]);
-				closedList.push((x-1)*size+y)
-				route_matrix[x-1][y] = [x, y];
-			}
-			if ((size > x + 1 && x + 1 >= 0) && table_matrix[x + 1][y] != "S" && closedList.indexOf((x+1)*size+y) == -1)
-			{
-				let sum = current_td[2] + 10 + Math.abs(x + 1 - xf)+Math.abs(y - yf);
-				openList.push([x + 1, y, sum]);
-				closedList.push((x+1)*size+y)
-				route_matrix[x+1][y] = [x, y];
-			}
-			if ((size > y - 1 && y - 1 >= 0) && table_matrix[x][y - 1] != "S" && closedList.indexOf(x*size+y-1) == -1)
-			{
-				let sum = current_td[2] + 10 + Math.abs(x - xf)+Math.abs(y - 1 - yf);
-				openList.push([x, y - 1, sum]);
-				closedList.push(x*size+y-1)
-				route_matrix[x][y-1] = [x, y];
-			}
-			if ((size > y + 1 && y + 1 >= 0) && table_matrix[x][y + 1] != "S" && closedList.indexOf(x*size+y+1) == -1)
-			{
-				let sum = current_td[2] + 10 + Math.abs(x - xf)+Math.abs(y + 1 - yf);
-				openList.push([x, y + 1, sum]);
-				closedList.push(x*size+y+1)
-				route_matrix[x][y+1] = [x, y];
-			}
+		openList.push(current_td);	// заносим в открытый список стартовую точку
+		
 
-			if ((size > x - 1 && x - 1 >= 0) && (size > y - 1 && y - 1 >= 0) && table_matrix[x - 1][y - 1] != "S" && closedList.indexOf((x-1)*size+y-1) == -1)
+		// пока список не пуст или мы не пришли к финишу
+		const intervalId = setInterval(() => {
+			if (!(openList.length == 0 || (current_td[0] == xf && current_td[1] == yf)))
 			{
-				let sum = current_td[2] + 14 + Math.abs(x - 1 - xf)+Math.abs(y - 1 - yf);
-				openList.push([x - 1, y - 1, sum]);
-				closedList.push((x-1)*size+y-1)
-				route_matrix[x-1][y-1] = [x, y];
-			}
-			if ((size > x - 1 && x - 1 >= 0) && (size > y + 1 && y + 1 >= 0) && table_matrix[x - 1][y + 1] != "S" && closedList.indexOf((x-1)*size+y+1) == -1)
-			{
-				let sum = current_td[2] + 14 + Math.abs(x - 1 - xf)+Math.abs(y + 1 - yf);
-				openList.push([x - 1, y + 1, sum]);
-				closedList.push((x-1)*size+y+1)
-				route_matrix[x-1][y+1] = [x, y];
-			}
-			if ((size > x + 1 && x + 1>= 0) && (size > y - 1 && y - 1 >= 0) && table_matrix[x + 1][y - 1] != "S" && closedList.indexOf((x+1)*size+y-1) == -1)
-			{
-				let sum = current_td[2] + 14 + Math.abs(x + 1 - xf)+Math.abs(y - 1 - yf);
-				openList.push([x + 1, y - 1, sum]);
-				closedList.push((x+1)*size+y-1)
-				route_matrix[x+1][y-1] = [x, y];
-			}
-			if ((size > x + 1 && x + 1 >= 0) && (size > y + 1 && y + 1 >= 0) && table_matrix[x + 1][y + 1] != "S" && closedList.indexOf((x+1)*size+y+1) == -1)
-			{
-				let sum = current_td[2] + 14 + Math.abs(x + 1 - xf)+Math.abs(y + 1 - yf);
-				openList.push([x + 1, y + 1, sum]);
-				closedList.push((x+1)*size+y+1)
-				route_matrix[x+1][y+1] = [x, y];
-			}
-			// переносим рассматриваемую точку в закрытый список, чтобы больше не рассматривать
-			closedList.push(current_td[0]*size+current_td[1]);
-			openList = openList.filter(function(f){if (JSON.stringify(f) != JSON.stringify(current_td)) return f});
-			// ищем минимального соседа в открытом списке
-			let min = Infinity;
-			for (let i = 0; i < openList.length; i++)
-			{
-				if (openList[i][2] < min)
+				x = current_td[0];	// координаты рассматриваемой точки
+				y = current_td[1];
+				// далее смотрим соседей и занесём в открытый список если там не стена или он не в другом списке
+				if ((size > x - 1 && x-1 >= 0) && table_matrix[x - 1][y] != "S" && closedList.indexOf((x-1)*size+y) == -1)
 				{
-					current_td = openList[i];
-					min = current_td[2];
+					let sum = current_td[2] + 10 + Math.abs(x - 1 - xf)+Math.abs(y - yf);
+					openList.push([x - 1, y, sum]);
+					closedList.push((x-1)*size+y)
+					route_matrix[x-1][y] = [x, y];
+					document.getElementById((x-1)*size+y).innerHTML = sum;
 				}
-			}
-		}
+				if ((size > x + 1 && x + 1 >= 0) && table_matrix[x + 1][y] != "S" && closedList.indexOf((x+1)*size+y) == -1)
+				{
+					let sum = current_td[2] + 10 + Math.abs(x + 1 - xf)+Math.abs(y - yf);
+					openList.push([x + 1, y, sum]);
+					closedList.push((x+1)*size+y)
+					route_matrix[x+1][y] = [x, y];
+					document.getElementById((x+1)*size+y).innerHTML = sum;
+				}
+				if ((size > y - 1 && y - 1 >= 0) && table_matrix[x][y - 1] != "S" && closedList.indexOf(x*size+y-1) == -1)
+				{
+					let sum = current_td[2] + 10 + Math.abs(x - xf)+Math.abs(y - 1 - yf);
+					openList.push([x, y - 1, sum]);
+					closedList.push(x*size+y-1)
+					route_matrix[x][y-1] = [x, y];
+					document.getElementById(x*size+y-1).innerHTML = sum;
+				}
+				if ((size > y + 1 && y + 1 >= 0) && table_matrix[x][y + 1] != "S" && closedList.indexOf(x*size+y+1) == -1)
+				{
+					let sum = current_td[2] + 10 + Math.abs(x - xf)+Math.abs(y + 1 - yf);
+					openList.push([x, y + 1, sum]);
+					closedList.push(x*size+y+1)
+					route_matrix[x][y+1] = [x, y];
+					document.getElementById(x*size+y+1).innerHTML = sum;
+				}
 
-		let i = xf;
-		let j = yf;
-		// цикл для отображения итогового маршрута
-		while (!(i == xn && j == yn))
-		{
-			let temp_i = i, temp_j = j;
-			i = route_matrix[temp_i][temp_j][0];
-			j = route_matrix[temp_i][temp_j][1];
-			document.getElementById(i*size+j).setAttribute('style','background-color: green');
-		}
-		document.getElementById(i*size+j).setAttribute('style','background-color: blue');
+				if ((size > x - 1 && x - 1 >= 0) && (size > y - 1 && y - 1 >= 0) && table_matrix[x - 1][y - 1] != "S" && closedList.indexOf((x-1)*size+y-1) == -1)
+				{
+					let sum = current_td[2] + 14 + Math.abs(x - 1 - xf)+Math.abs(y - 1 - yf);
+					openList.push([x - 1, y - 1, sum]);
+					closedList.push((x-1)*size+y-1)
+					route_matrix[x-1][y-1] = [x, y];
+					document.getElementById((x-1)*size+y-1).innerHTML = sum;
+				}
+				if ((size > x - 1 && x - 1 >= 0) && (size > y + 1 && y + 1 >= 0) && table_matrix[x - 1][y + 1] != "S" && closedList.indexOf((x-1)*size+y+1) == -1)
+				{
+					let sum = current_td[2] + 14 + Math.abs(x - 1 - xf)+Math.abs(y + 1 - yf);
+					openList.push([x - 1, y + 1, sum]);
+					closedList.push((x-1)*size+y+1)
+					route_matrix[x-1][y+1] = [x, y];
+					document.getElementById((x-1)*size+y+1).innerHTML = sum;
+				}
+				if ((size > x + 1 && x + 1>= 0) && (size > y - 1 && y - 1 >= 0) && table_matrix[x + 1][y - 1] != "S" && closedList.indexOf((x+1)*size+y-1) == -1)
+				{
+					let sum = current_td[2] + 14 + Math.abs(x + 1 - xf)+Math.abs(y - 1 - yf);
+					openList.push([x + 1, y - 1, sum]);
+					closedList.push((x+1)*size+y-1)
+					route_matrix[x+1][y-1] = [x, y];
+					document.getElementById((x+1)*size+y-1).innerHTML = sum;
+				}
+				if ((size > x + 1 && x + 1 >= 0) && (size > y + 1 && y + 1 >= 0) && table_matrix[x + 1][y + 1] != "S" && closedList.indexOf((x+1)*size+y+1) == -1)
+				{
+					let sum = current_td[2] + 14 + Math.abs(x + 1 - xf)+Math.abs(y + 1 - yf);
+					openList.push([x + 1, y + 1, sum]);
+					closedList.push((x+1)*size+y+1)
+					route_matrix[x+1][y+1] = [x, y];
+					document.getElementById((x+1)*size+y+1).innerHTML = sum;
+				}
+				// переносим рассматриваемую точку в закрытый список, чтобы больше не рассматривать
+				closedList.push(current_td[0]*size+current_td[1]);
+				openList = openList.filter(function(f){if (JSON.stringify(f) != JSON.stringify(current_td)) return f});
+				// ищем минимального соседа в открытом списке
+				let min = Infinity;
+				for (let i = 0; i < openList.length; i++)
+				{
+					if (openList[i][2] < min)
+					{
+						current_td = openList[i];
+						min = current_td[2];
+					}
+				}
+				document.getElementById(current_td[0]*size+current_td[1]).setAttribute('style','background-color: gray');
+			}
+			else {
+				document.getElementById(xf*size+yf).setAttribute('style','background-color: red');
+
+				let i = xf;
+				let j = yf;
+				// цикл для отображения итогового маршрута
+				while (!(i == xn && j == yn))
+				{
+					let temp_i = i, temp_j = j;
+					i = route_matrix[temp_i][temp_j][0];
+					j = route_matrix[temp_i][temp_j][1];
+					document.getElementById(i*size+j).setAttribute('style','background-color: green');
+				}
+				document.getElementById(i*size+j).setAttribute('style','background-color: blue');
+				clearInterval(intervalId);
+			}
+		}, 150);
 	}
 
 	if (elem.target.id == 'reset_btn')
