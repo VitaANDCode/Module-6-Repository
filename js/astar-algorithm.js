@@ -1,15 +1,13 @@
 // Обработчик кликов
 var size;				// размер таблицы
 var table_matrix = [];	//матричный вид таблицы
-var openList = [];		//открытый список
-var closedList = [];	//закрытый список
-var route_matrix = [];	//матрица стрелок
-var current_td = [];	//текущая клетка
+var gray_list = [];
+var green_list = [];
 
-var xn, yn, xf, yf, x, y; // координаты начала, конца, курентовые координаты
+var nx, ny, fx, fy, x, y; // координаты начала, конца, курентовые координаты
 var start_id, finish_id;  // номер старта и конца
 
-var code_of_button = 0;
+var code_of_button;
 var isThereStart = false;
 var isThereFinish = false;
 
@@ -25,7 +23,7 @@ document.addEventListener('click', function(elem)
 			table_matrix[i] = [];
 			for (let j = 0; j < size; j++)
 			{
-				table_matrix[i][j] = 'P';	// пустота
+				table_matrix[i][j] = 'void';	// пустота
 			}
 		}
 
@@ -49,151 +47,137 @@ document.addEventListener('click', function(elem)
 			table.appendChild(tr);
 		}
 		parrent.appendChild(table);
-		elem.target.setAttribute('disabled', '')
+		elem.target.setAttribute('disabled', '');
 	}
 	if (elem.target.className == 'table-item')
 	{
-		if (code_of_button == 3) 
+		let td_id = elem.target.id;
+		let td_x = Math.floor(td_id/size);
+		let td_y = td_id % size;
+		if (code_of_button == 'wall') 
 		{
 			elem.target.setAttribute('style', 'background-color: purple');
-			table_matrix[Math.floor(elem.target.id/size)][elem.target.id % size] = "S";	// стена
-
-			if (window.getComputedStyle(elem.target).getPropertyValue("background-color") == 'rgb(255, 0, 0)') {
+			
+			if (table_matrix[td_x][td_y] == 'finish') {
 				isThereFinish = false;
 			}
 	
-			else if (window.getComputedStyle(elem.target).getPropertyValue("background-color") == 'rgb(0, 0, 255)') {
+			else if (table_matrix[td_x][td_y] == 'start') {
 				isThereStart = false;
 			}
+
+			table_matrix[td_x][td_y] = 'wall';	// стена
 		}
 
-		else if (code_of_button == 1 && isThereStart == false)
+		else if (code_of_button == 'start' && isThereStart == false)
 		{
 			elem.target.setAttribute('style', 'background-color: blue');
-			table_matrix[Math.floor(elem.target.id/size)][elem.target.id % size] = "N";	// начало
+
 			start_id = elem.target.id;
 			isThereStart = true;
 
-			if (window.getComputedStyle(elem.target).getPropertyValue("background-color") == 'rgb(255, 0, 0)') {
+			if (table_matrix[td_x][td_y] == 'finish') {
 				isThereFinish = false;
 			}
+
+			table_matrix[td_x][td_y] = 'start';	// начало
 		}
 
-		else if (code_of_button == 2 && isThereFinish == false)
+		else if (code_of_button == 'finish' && isThereFinish == false)
 		{
 			elem.target.setAttribute('style', 'background-color: red');
-			table_matrix[Math.floor(elem.target.id/size)][elem.target.id % size] = "K";	// конец
+
 			finish_id = elem.target.id;
 			isThereFinish = true;
 
-			if (window.getComputedStyle(elem.target).getPropertyValue("background-color") == 'rgb(0, 0, 255)') {
+			if (table_matrix[td_x][td_y] == 'start') {
 				isThereStart = false;
 			}
+
+			table_matrix[td_x][td_y] = 'finish';	// конец
 		}
 
-		else if (code_of_button == 4)
+		else if (code_of_button == 'void')
 		{
-			if (window.getComputedStyle(elem.target).getPropertyValue("background-color") == 'rgb(255, 0, 0)') {
+			if (table_matrix[td_x][td_y] == 'finish') {
 				isThereFinish = false;
 			}
 	
-			else if (window.getComputedStyle(elem.target).getPropertyValue("background-color") == 'rgb(0, 0, 255)') {
+			else if (table_matrix[td_x][td_y] == 'start') {
 				isThereStart = false;
 			}
 	
 			elem.target.setAttribute('style', 'background-color: white');
+			table_matrix[td_x][td_y] = 'void';
 		}
 	}	
 
-	if (elem.target.id == 'crt_route')	// если нажали "построить маршрут"
+	if (elem.target.id == 'crt_route' && isThereStart == true && isThereFinish == true)	// если нажали "построить маршрут"
 	{
+		
+		let openList = [];		//открытый список
+		let closedList = [];	//закрытый список
+		let route_matrix = [];	//матрица стрелок
+		let current_td = [];	//текущая клетка
+
+		document.querySelector('#set_start_btn').setAttribute('disabled', '');
+		document.querySelector('#set_finish_btn').setAttribute('disabled', '');
+		document.querySelector('#set_wall_btn').setAttribute('disabled', '');
+		document.querySelector('#crt_route').setAttribute('disabled', '');
+		document.querySelector('#reset_td').setAttribute('disabled', '');
+		document.querySelector('#reset_table').setAttribute('disabled', '');
+
+		for (let i = 0; i < size; i++)
+		{
+			for (let j = 0; j < size; j++)
+			{
+				if (table_matrix[i][j] == 'gray' || table_matrix[i][j] == 'green')
+					document.getElementById(i*size+j).setAttribute('style','background-color: white');
+			}
+		}
+
 		for (let i = 0; i < size; i++)	// создание матрицы стрелок
 			route_matrix[i] = [];
 
 		openList = [];					// создание открытого и закрытого списков
 		closedList = [];
 
-		xn = Math.floor(start_id/size);	// вычисление координат начала и конца
-		yn = start_id % size;
-		xf = Math.floor(finish_id/size);
-		yf = finish_id % size;
+		nx = Math.floor(start_id/size);	// вычисление координат начала и конца
+		ny = start_id % size;
+		fx = Math.floor(finish_id/size);
+		fy = finish_id % size;
 
-		current_td = [xn, yn, Math.abs(xn - xf)+Math.abs(yn - yf)];		// рассматриваемая ячейка
+		current_td = [nx, ny, Math.abs(nx - fx)+Math.abs(ny - fy)];		// рассматриваемая ячейка
 		openList.push(current_td);	// заносим в открытый список стартовую точку
 		
-
 		// пока список не пуст или мы не пришли к финишу
 		const intervalId = setInterval(() => {
-			if (!(openList.length == 0 || (current_td[0] == xf && current_td[1] == yf)))
+			if (!(openList.length == 0 || (current_td[0] == fx && current_td[1] == fy)))
 			{
 				x = current_td[0];	// координаты рассматриваемой точки
 				y = current_td[1];
-				// далее смотрим соседей и занесём в открытый список если там не стена или он не в другом списке
-				if ((size > x - 1 && x-1 >= 0) && table_matrix[x - 1][y] != "S" && closedList.indexOf((x-1)*size+y) == -1)
+
+				for (let i = -1; i < 2; i++)
 				{
-					let sum = current_td[2] + 10 + Math.abs(x - 1 - xf)+Math.abs(y - yf);
-					openList.push([x - 1, y, sum]);
-					closedList.push((x-1)*size+y)
-					route_matrix[x-1][y] = [x, y];
-					document.getElementById((x-1)*size+y).innerHTML = sum;
-				}
-				if ((size > x + 1 && x + 1 >= 0) && table_matrix[x + 1][y] != "S" && closedList.indexOf((x+1)*size+y) == -1)
-				{
-					let sum = current_td[2] + 10 + Math.abs(x + 1 - xf)+Math.abs(y - yf);
-					openList.push([x + 1, y, sum]);
-					closedList.push((x+1)*size+y)
-					route_matrix[x+1][y] = [x, y];
-					document.getElementById((x+1)*size+y).innerHTML = sum;
-				}
-				if ((size > y - 1 && y - 1 >= 0) && table_matrix[x][y - 1] != "S" && closedList.indexOf(x*size+y-1) == -1)
-				{
-					let sum = current_td[2] + 10 + Math.abs(x - xf)+Math.abs(y - 1 - yf);
-					openList.push([x, y - 1, sum]);
-					closedList.push(x*size+y-1)
-					route_matrix[x][y-1] = [x, y];
-					document.getElementById(x*size+y-1).innerHTML = sum;
-				}
-				if ((size > y + 1 && y + 1 >= 0) && table_matrix[x][y + 1] != "S" && closedList.indexOf(x*size+y+1) == -1)
-				{
-					let sum = current_td[2] + 10 + Math.abs(x - xf)+Math.abs(y + 1 - yf);
-					openList.push([x, y + 1, sum]);
-					closedList.push(x*size+y+1)
-					route_matrix[x][y+1] = [x, y];
-					document.getElementById(x*size+y+1).innerHTML = sum;
+					for (let j = -1; j < 2; j++)
+					{
+						if ((size > x + i && x + i >= 0) && (size > y + j && y + j >= 0) && table_matrix[x + i][y + j] != "wall" && closedList.indexOf((x+i)*size+y + j) == -1 && !(i == 0 && j == 0))
+						{
+							let cost;
+							if (i == 0 || j == 0)
+								cost = 10;
+							else
+								cost = 14;
+							
+							let sum = current_td[2] + cost + Math.abs(x + i - fx)+Math.abs(y + j - fy);
+							openList.push([x + i, y + j, sum]);
+							closedList.push((x + i)*size+y + j);
+							route_matrix[x + i][y + j] = [x, y];
+							//document.getElementById((x + i)*size+y + j).innerHTML = sum;
+						}
+					}
 				}
 
-				if ((size > x - 1 && x - 1 >= 0) && (size > y - 1 && y - 1 >= 0) && table_matrix[x - 1][y - 1] != "S" && closedList.indexOf((x-1)*size+y-1) == -1)
-				{
-					let sum = current_td[2] + 14 + Math.abs(x - 1 - xf)+Math.abs(y - 1 - yf);
-					openList.push([x - 1, y - 1, sum]);
-					closedList.push((x-1)*size+y-1)
-					route_matrix[x-1][y-1] = [x, y];
-					document.getElementById((x-1)*size+y-1).innerHTML = sum;
-				}
-				if ((size > x - 1 && x - 1 >= 0) && (size > y + 1 && y + 1 >= 0) && table_matrix[x - 1][y + 1] != "S" && closedList.indexOf((x-1)*size+y+1) == -1)
-				{
-					let sum = current_td[2] + 14 + Math.abs(x - 1 - xf)+Math.abs(y + 1 - yf);
-					openList.push([x - 1, y + 1, sum]);
-					closedList.push((x-1)*size+y+1)
-					route_matrix[x-1][y+1] = [x, y];
-					document.getElementById((x-1)*size+y+1).innerHTML = sum;
-				}
-				if ((size > x + 1 && x + 1>= 0) && (size > y - 1 && y - 1 >= 0) && table_matrix[x + 1][y - 1] != "S" && closedList.indexOf((x+1)*size+y-1) == -1)
-				{
-					let sum = current_td[2] + 14 + Math.abs(x + 1 - xf)+Math.abs(y - 1 - yf);
-					openList.push([x + 1, y - 1, sum]);
-					closedList.push((x+1)*size+y-1)
-					route_matrix[x+1][y-1] = [x, y];
-					document.getElementById((x+1)*size+y-1).innerHTML = sum;
-				}
-				if ((size > x + 1 && x + 1 >= 0) && (size > y + 1 && y + 1 >= 0) && table_matrix[x + 1][y + 1] != "S" && closedList.indexOf((x+1)*size+y+1) == -1)
-				{
-					let sum = current_td[2] + 14 + Math.abs(x + 1 - xf)+Math.abs(y + 1 - yf);
-					openList.push([x + 1, y + 1, sum]);
-					closedList.push((x+1)*size+y+1)
-					route_matrix[x+1][y+1] = [x, y];
-					document.getElementById((x+1)*size+y+1).innerHTML = sum;
-				}
 				// переносим рассматриваемую точку в закрытый список, чтобы больше не рассматривать
 				closedList.push(current_td[0]*size+current_td[1]);
 				openList = openList.filter(function(f){if (JSON.stringify(f) != JSON.stringify(current_td)) return f});
@@ -207,22 +191,38 @@ document.addEventListener('click', function(elem)
 						min = current_td[2];
 					}
 				}
-				document.getElementById(current_td[0]*size+current_td[1]).setAttribute('style','background-color: gray');
+				
+				if (current_td[0]*size+current_td[1] != finish_id)
+				{
+					document.getElementById(current_td[0]*size+current_td[1]).setAttribute('style','background-color: gray');
+					table_matrix[current_td[0]][current_td[1]] = 'gray';
+				}
 			}
 			else {
-				document.getElementById(xf*size+yf).setAttribute('style','background-color: red');
 
-				let i = xf;
-				let j = yf;
+				let i = fx;
+				let j = fy;
 				// цикл для отображения итогового маршрута
-				while (!(i == xn && j == yn))
+				while (!(i == nx && j == ny))
 				{
 					let temp_i = i, temp_j = j;
 					i = route_matrix[temp_i][temp_j][0];
 					j = route_matrix[temp_i][temp_j][1];
-					document.getElementById(i*size+j).setAttribute('style','background-color: green');
+					if (i*size+j != start_id)
+					{
+						document.getElementById(i*size+j).setAttribute('style','background-color: green');
+						table_matrix[i][j] = 'green';
+					}
 				}
-				document.getElementById(i*size+j).setAttribute('style','background-color: blue');
+				table_matrix[nx][ny] = 'start';
+				table_matrix[fx][fy] = 'finish';
+
+				document.querySelector('#set_start_btn').removeAttribute('disabled');
+				document.querySelector('#set_finish_btn').removeAttribute('disabled');
+				document.querySelector('#set_wall_btn').removeAttribute('disabled');
+				document.querySelector('#crt_route').removeAttribute('disabled');
+				document.querySelector('#reset_td').removeAttribute('disabled');
+				document.querySelector('#reset_table').removeAttribute('disabled');
 				clearInterval(intervalId);
 			}
 		}, 150);
@@ -230,6 +230,8 @@ document.addEventListener('click', function(elem)
 
 	if (elem.target.id == 'reset_table')
 	{
+		isThereStart = false;
+		isThereFinish = false;
 		astar_table.remove();
 		document.querySelector('#crt_btn').removeAttribute('disabled');
 	}
