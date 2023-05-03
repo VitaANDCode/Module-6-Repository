@@ -18,18 +18,6 @@ document.addEventListener('click', function(elem)
 		}
 		parrent.appendChild(table);
 	}
-	else if (elem.target.id == "crt_route") {
-		var openList = [];
-		var closedList = [];
-		openList.push(startNode);
-
-		while(openList.lenght != 0)
-		{
-
-		}
-		
-	}
-
 	if (elem.target.className == 'table-item' && buttonPaint == true) 
 	{
 		elem.target.setAttribute('style', 'background-color: purple');

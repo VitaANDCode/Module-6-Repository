@@ -20,3 +20,16 @@ main {
 	color: white;
 	text-shadow: 16px 16px 16px #000;
 }
+
+td, tr, table {
+	border: 1px solid black;
+}
+
+td {
+	height: 75px;
+	width: 75px;
+}
+input {
+	height: 100px;
+	width: 200px;
+}
