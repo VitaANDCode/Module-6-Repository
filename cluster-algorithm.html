@@ -4,7 +4,7 @@
 	<!-- Кодировка -->
 	<meta charset="UTF-8">
 	<!-- Стили-->
-	<link rel="stylesheet" href="css/klast.css">
+	<link rel="stylesheet" href="css/cluster-algorithm.css">
 	<!-- Иконка сайта-->
   <link rel="shortcut icon" href="img/icon.ico" type="image/x-icon">
 	<!-- Подключение шрифтов -->
@@ -19,8 +19,13 @@
 </head>
 <body>
     <main>
-			<h1 class="main-header">Алгоритм кластеризации</h1>
-			
-		</main>
+		<h1 class="main-header">Алгоритм кластеризации</h1>
+		<input type="button" value="Запуск" id="launch">
+		<input type="button" value="Сброс" id="clear_btn">
+		<input type="number" id="countOfClusters_btn" placeholder="Количество кластеров" min="1">
+		<canvas width = "750px" height = "540px" id="canvas">
+			<script src="js/cluster-algorithm.js"></script>
+		</canvas>
+	</main>
 </body>
 </html>
