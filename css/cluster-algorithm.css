@@ -1,6 +1,6 @@
 body {
-    margin: 0;
-    font-family: 'Caveat', cursive;
+	margin: 0;
+	font-family: 'Caveat', cursive;
 }
 
 main {
@@ -21,6 +21,15 @@ main {
 	text-shadow: 16px 16px 16px #000;
 }
 
-canvas{
-	margin-left: 25%;
+#canvas
+{
+	display: block;
+	margin: 0 auto;
+
+	border: 7px solid black;
+}
+
+.canvas-buttons {
+	margin-top: 5vh;
+	text-align: center;
 }
