@@ -40,7 +40,7 @@ label {
 }
 
 tr, td, table {
-	border: 3px solid purple;
+	border: 2px solid purple;
 }
 
 table {
@@ -52,8 +52,8 @@ table {
 }
 
 td {
-	width: 6vh;
-	height: 6vh;
+	width: 4.5vh;
+	height: 4.5vh;
 	background-color: white;
 
 	transition: 0.2s linear;
@@ -61,4 +61,33 @@ td {
 
 td:hover {
 	border-color: red;
+}
+
+.main-btn {
+	appearance: none;
+	border: 0;
+	border-radius: 5px;
+	background: purple;
+	color: #fff;
+	padding: 8px 16px;
+	font-size: 16px;
+	transition: 0.2s linear;
+
+	padding-left: 15px;
+	padding-right: 15px;
+	margin-left: 5px;
+}
+
+.main-btn:hover {
+  background: #f501fd;
+}
+
+.main-btn[disabled] {
+	color: #d2d5db;
+	background: #6c7589;
+	cursor: not-allowed;
+}
+
+.btn-container {
+	margin-top: 30px;
 }

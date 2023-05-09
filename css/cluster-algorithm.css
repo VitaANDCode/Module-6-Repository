@@ -37,3 +37,46 @@ main {
 	margin-top: 5vh;
 	text-align: center;
 }
+
+.canvas-button {
+	appearance: none;
+	border: 0;
+	border-radius: 5px;
+	background: purple;
+	color: #fff;
+	padding: 8px 16px;
+	font-size: 16px;
+	transition: 0.2s linear;
+
+	padding-left: 25px;
+	padding-right: 25px;
+	margin-left: 20px;
+}
+
+.canvas-button:hover {
+  background: #f501fd;
+}
+
+.canvas-button[disabled] {
+	color: #d2d5db;
+	background: #6c7589;
+	cursor: not-allowed;
+}
+
+.canvas-input {
+  height: 19px;
+	width: 170px;
+  padding: 0.375rem 0.75rem;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #bdbdbd;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+	margin-left: 20px;
+}

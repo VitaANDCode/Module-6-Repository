@@ -22,15 +22,19 @@
 			<h1 class="main-header">Алгоритм a-star</h1>
 			<section class="buttons">
 				<form>
-					<label for="size_table">Введите размер таблицы</label>
-					<input type="number" min = 1 id="size_table" placeholder="Ввод">
-					<input type="button" value="Создать таблицу" id="crt_btn">
-					<input type="button" value="Установить стартовую точку" id="set_start_btn" onclick="code_of_button = 'start'">
-					<input type="button" value="Установить конечную точку" id="set_finish_btn" onclick="code_of_button = 'finish'">
-					<input type="button" value="Поставить стенки" id="set_wall_btn" onclick="code_of_button = 'wall'">
-					<input type="button" value="Построить маршрут" id = "crt_route">
-					<input type="button" value="Очистить ячейку" id="reset_td" onclick="code_of_button = 'void'">
-					<input type="reset" value="Сбросить" id="reset_table">
+					<div>
+						<label for="size_table">Введите размер таблицы</label>
+						<input type="number" min=1 id="size_table" placeholder="Ввод">
+					</div>
+					<div class="btn-container">
+						<input type="button" value="Создать таблицу" id="crt_btn" class="main-btn">
+						<input type="button" value="Установить стартовую точку" id="set_start_btn" onclick="code_of_button = 'start'" class="main-btn">
+						<input type="button" value="Установить конечную точку" id="set_finish_btn" onclick="code_of_button = 'finish'" class="main-btn">
+						<input type="button" value="Поставить стенки" id="set_wall_btn" onclick="code_of_button = 'wall'" class="main-btn">
+						<input type="button" value="Построить маршрут" id = "crt_route" class="main-btn">
+						<input type="button" value="Очистить ячейку" id="reset_td" onclick="code_of_button = 'void'" class="main-btn">
+						<input type="reset" value="Сбросить" id="reset_table" class="main-btn">
+					</div>
 			</form>
 			</section>
 			<section class="table-map"></section>
