@@ -15,8 +15,14 @@ document.addEventListener('click', function(elem)
 {
 	if (elem.target.id == 'crt_btn')
 	{
-		var parrent = document.querySelector('.table-map');
 		size = document.getElementById("size_table").value;
+		if (isNaN(size) || !size || !(size > 0 && size < 35))
+		{
+			alert('Некорректный ввод!');
+			return;
+		}
+
+		var parrent = document.querySelector('.table-map');
 
 		for (let i = 0; i < size; i++)
 		{
@@ -27,10 +33,7 @@ document.addEventListener('click', function(elem)
 			}
 		}
 
-		if (isNaN(size) || !size) {
-			alert('Некорректный ввод!');
-			return;
-		}
+		
 
 		var table = document.createElement('table');
 		table.setAttribute('id', 'astar_table');
@@ -199,24 +202,26 @@ document.addEventListener('click', function(elem)
 				}
 			}
 			else {
-
-				let i = fx;
-				let j = fy;
-				// цикл для отображения итогового маршрута
-				while (!(i == nx && j == ny))
+				if (current_td[0] == fx && current_td[1] == fy)
 				{
-					let temp_i = i, temp_j = j;
-					i = route_matrix[temp_i][temp_j][0];
-					j = route_matrix[temp_i][temp_j][1];
-					if (i*size+j != start_id)
+					let i = fx;
+					let j = fy;
+					// цикл для отображения итогового маршрута
+					while (!(i == nx && j == ny))
 					{
-						document.getElementById(i*size+j).setAttribute('style','background-color: green');
-						table_matrix[i][j] = 'green';
+						let temp_i = i, temp_j = j;
+						i = route_matrix[temp_i][temp_j][0];
+						j = route_matrix[temp_i][temp_j][1];
+						if (i*size+j != start_id)
+						{
+							document.getElementById(i*size+j).setAttribute('style','background-color: green');
+							table_matrix[i][j] = 'green';
+						}
 					}
+					table_matrix[nx][ny] = 'start';
+					table_matrix[fx][fy] = 'finish';
 				}
-				table_matrix[nx][ny] = 'start';
-				table_matrix[fx][fy] = 'finish';
-
+				
 				document.querySelector('#set_start_btn').removeAttribute('disabled');
 				document.querySelector('#set_finish_btn').removeAttribute('disabled');
 				document.querySelector('#set_wall_btn').removeAttribute('disabled');
