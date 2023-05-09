@@ -16,7 +16,7 @@ document.addEventListener('click', function(elem)
 	if (elem.target.id == 'crt_btn')
 	{
 		size = document.getElementById("size_table").value;
-		if (isNaN(size) || !size || !(size > 0 && size < 35))
+		if (isNaN(size) || !size || !(size > 2 && size < 36))
 		{
 			alert('Некорректный ввод!');
 			return;
@@ -195,7 +195,7 @@ document.addEventListener('click', function(elem)
 					}
 				}
 				
-				if (current_td[0]*size+current_td[1] != finish_id)
+				if (current_td[0]*size+current_td[1] != finish_id && current_td[0]*size+current_td[1] != start_id)
 				{
 					document.getElementById(current_td[0]*size+current_td[1]).setAttribute('style','background-color: gray');
 					table_matrix[current_td[0]][current_td[1]] = 'gray';
@@ -220,8 +220,10 @@ document.addEventListener('click', function(elem)
 					}
 					table_matrix[nx][ny] = 'start';
 					table_matrix[fx][fy] = 'finish';
+				} else {
+					alert("Путь не найден!");
 				}
-				
+
 				document.querySelector('#set_start_btn').removeAttribute('disabled');
 				document.querySelector('#set_finish_btn').removeAttribute('disabled');
 				document.querySelector('#set_wall_btn').removeAttribute('disabled');
