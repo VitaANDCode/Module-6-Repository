@@ -83,6 +83,10 @@ function algorithm()
                     change = true;
                 }
             }
+            else
+            {
+                centroids[numOfCluster] = [Math.floor(Math.random() * canvas.width), Math.floor(Math.random() * canvas.height)];
+            }
         }
     }
     
