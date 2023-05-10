@@ -109,3 +109,26 @@ td:hover {
 
 	margin-left: 15px;
 }
+
+.return_container {
+	margin-top: 10px;
+	margin-left: 10px;
+	background-color: purple;
+	width: 25vh;
+	padding-top: 10px;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	border-radius: 5px;
+	transition: 0.2s linear;
+}
+
+.return_container:hover {
+  background: #f501fd;
+}
+
+.return_button {
+	text-decoration: none;
+	color: #fff;
+	font-size: 32px;
+}
