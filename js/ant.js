@@ -2,8 +2,8 @@ var x, y;
 var widthOfPoint = 10;
 var heightOfPoint = widthOfPoint;
 var points = [];
-var countOfAnts = 1500;
-var countOfIterations = 150;
+var countOfAnts = 1000;
+var countOfIterations = 100;
 
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext('2d');
