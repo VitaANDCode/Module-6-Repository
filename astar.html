@@ -18,30 +18,30 @@
   <title>Module 6 | A-STAR</title>
 </head>
 <body>
-    <main>
-			<h1 class="main-header">Алгоритм a-star</h1>
-			<section class="buttons">
-				<form>
-					<div>
-						<label for="size_table">Введите размер таблицы</label>
-						<input type="number" min=1 id="size_table" placeholder="Значение от 3 до 35" class="main-input">
-					</div>
-					<div class="btn-container">
-						<input type="button" value="Создать таблицу" id="crt_btn" class="main-btn">
-						<input type="button" value="Установить стартовую точку" id="set_start_btn" onclick="code_of_button = 'start'" class="main-btn">
-						<input type="button" value="Установить конечную точку" id="set_finish_btn" onclick="code_of_button = 'finish'" class="main-btn">
-						<input type="button" value="Поставить стенки" id="set_wall_btn" onclick="code_of_button = 'wall'" class="main-btn">
-						<input type="button" value="Построить маршрут" id = "crt_route" class="main-btn">
-						<input type="button" value="Очистить ячейку" id="reset_td" onclick="code_of_button = 'void'" class="main-btn">
-						<input type="reset" value="Сбросить" id="reset_table" class="main-btn">
-					</div>
+	<div class="return_container">
+		<a href="index.html" class="return_button">Возврат на главную</a>
+	</div>
+	<main>
+		<h1 class="main-header">Алгоритм a-star</h1>
+		<section class="buttons">
+			<form>
+				<div>
+					<label for="size_table">Введите размер таблицы</label>
+					<input type="number" min=1 id="size_table" placeholder="Значение от 3 до 35" class="main-input">
+				</div>
+				<div class="btn-container">
+					<input type="button" value="Создать таблицу" id="crt_btn" class="main-btn">
+					<input type="button" value="Установить стартовую точку" id="set_start_btn" onclick="code_of_button = 'start'" class="main-btn">
+					<input type="button" value="Установить конечную точку" id="set_finish_btn" onclick="code_of_button = 'finish'" class="main-btn">
+					<input type="button" value="Поставить стенки" id="set_wall_btn" onclick="code_of_button = 'wall'" class="main-btn">
+					<input type="button" value="Построить маршрут" id = "crt_route" class="main-btn">
+					<input type="button" value="Очистить ячейку" id="reset_td" onclick="code_of_button = 'void'" class="main-btn">
+					<input type="reset" value="Сбросить" id="reset_table" class="main-btn">
+				</div>
 			</form>
-			</section>
-			<section class="table-map"></section>
-
-			<script src="js/astar-algorithm.js">
-
-			</script>
-		</main>
+		</section>
+		<section class="table-map"></section>
+		<script src="js/astar-algorithm.js"></script>
+	</main>
 </body>
 </html>

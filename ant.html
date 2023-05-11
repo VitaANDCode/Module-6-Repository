@@ -6,7 +6,7 @@
 	<!-- Стили-->
 	<link rel="stylesheet" href="css/ant.css">
 	<!-- Иконка сайта-->
-  <link rel="shortcut icon" href="img/icon.ico" type="image/x-icon">
+	<link rel="shortcut icon" href="img/icon.ico" type="image/x-icon">
 	<!-- Подключение шрифтов -->
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,15 +18,19 @@
   <title>Module 6 | Ant algorithm</title>
 </head>
 <body>
-    <main>
-			<h1 class="main-header">Муравьиный алгоритм</h1>
-			<canvas width="750px" height="540px" id="canvas"></canvas>
+	<div class="return_container">
+		<a href="index.html" class="return_button">Возврат на главную</a>
+	</div>
+	<main>
+		<h1 class="main-header">Муравьиный алгоритм</h1>
+		<canvas width="750px" height="540px" id="canvas"></canvas>
+		<section class="canvas_buttons">
 			<form>
-				<input type="button" id="launch_button" value="Запуск" id>
-				<input type="reset" id="clear_btn" value="Сбросить">
+				<input type="button" id="launch_button" value="Запуск" class="canvas_button">
+				<input type="reset" id="clear_btn" value="Сбросить" class="canvas_button">
 			</form>
-		</main>
-
-		<script src="js/ant.js"></script>
+		</section>
+	</main>
+	<script src="js/ant.js"></script>
 </body>
 </html>
