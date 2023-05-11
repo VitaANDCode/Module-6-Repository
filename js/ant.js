@@ -15,6 +15,7 @@ var countOfAnts = 500;
 
 var minGreen = 75;
 var isAlgWorksNow = false;
+var opportunityToDrawPoints = true;
 
 var intervalId;
 
@@ -33,24 +34,31 @@ canvas.onmousemove = function() // записываем координаты к�
 
 canvas.onmousedown = function() // рисуем квадратики при клике 
 {
-	document.getElementById("launch_button").removeAttribute("disabled", "");
-    ctx.fillStyle = "black";
-    ctx.fillRect(x, y, widthOfPoint, heightOfPoint);
-    points.push([x+5,y+5]);
+	if (opportunityToDrawPoints)
+	{
+		document.getElementById("launch_button").removeAttribute("disabled", "");
+		ctx.fillStyle = "black";
+		ctx.fillRect(x, y, widthOfPoint, heightOfPoint);
+		points.push([x+5,y+5]);
+	}
 }
 
 document.addEventListener ("click", function(elem){
 	if (elem.target.id == 'launch_button')
 	{
 		document.getElementById("launch_button").setAttribute("disabled", "");
+		isAlgWorksNow = true;
+		opportunityToDrawPoints = false;
 		algorithm();
 	} 
 	else if (elem.target.id == "clear_btn")
 	{
 		document.getElementById("launch_button").setAttribute("disabled", "");
+		opportunityToDrawPoints = true;
 		if (isAlgWorksNow)
 		{
 			clearInterval(intervalId);
+			isAlgWorksNow = false;
 		}
 		points = [];
 
@@ -61,7 +69,6 @@ document.addEventListener ("click", function(elem){
 
 function algorithm()
 {
-	isAlgWorksNow = true;
 	let matrix = [];
 	
 	for (let i = 0; i < points.length; i++) {
@@ -87,7 +94,6 @@ function algorithm()
 	}
 
 	let k = 0;
-
 	intervalId = setInterval(() =>
 			{
 				if (k < countOfIterations)
