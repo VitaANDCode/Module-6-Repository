@@ -150,25 +150,6 @@ function algorithm()
 							pheromonesIncreases[way[i]][way[i-1]] += q / Math.pow(wayLength, c);
 						}
 					}
-					let pheromones = [];
-					let pheromones2 = [];
-					for (let i = 0; i < points.length; i++) 
-					{
-						for (let j = 0; j < points.length; j++) 
-						{
-							if (isNaN(matrix[i][j]))
-							{
-								pheromones.push(matrix[i][j][1]);
-							}
-							if (1==1)//(isNaN(pheromonesIncreases[i][j]))
-							{
-								pheromones2.push(pheromonesIncreases[i][j]);
-							}
-						}
-					}
-					console.log(k+1);
-					console.log(pheromones);
-					console.log(pheromones2);
 					k++;
 
 					let maxPheromon = -1;
