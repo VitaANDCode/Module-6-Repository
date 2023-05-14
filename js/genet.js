@@ -3,22 +3,24 @@ const widthOfPoint = 10;
 const heightOfPoint = widthOfPoint;
 let points = [];
 let population = [];
+let temp = [];
 
 let newIndivid;
 let closedList;
 let randIndex1;
 let randIndex2;
 let splitIndex;
+let numOfIteration;
 
-const mutationChance = 0.5;
-const countOfIterations = 500;
+const mutationChance = 0.4;
+const countOfIterations = 10000;
 let sizeOfPopulation;
 let countOfSwaps; 
 
-let min, max;
-let minLen, maxLen;
+let min = [], max = [];
+let minLen, maxLen, len;
+let deltaX, deltaY;
 
-const minGreen = 75;
 let isAlgWorksNow = false;
 let opportunityToDrawPoints = true;
 
@@ -84,20 +86,25 @@ function createStartPopulation()
     {
         population[0][i-1] = i;
     }
-        
-    for (let numOfIndivid = 1; numOfIndivid < sizeOfPopulation; numOfIndivid++)
+    
+    while (population.length < sizeOfPopulation)
     {
-        population[numOfIndivid] = [];
+        temp = [];
         for (let i = 0; i < points.length - 1; i++)
         {
-            population[numOfIndivid][i] = population[0][i];
+            temp[i] = population[0][i];
         }
-        
+
         for (let numOfSwap = 0; numOfSwap < countOfSwaps; numOfSwap++)
         {
             randIndex1 = Math.floor(Math.random() * (points.length - 1));
             randIndex2 = Math.floor(Math.random() * (points.length - 1));
-            [population[numOfIndivid][randIndex1], population[numOfIndivid][randIndex2]] = [population[numOfIndivid][randIndex2], population[numOfIndivid][randIndex1]];
+            [temp[randIndex1], temp[randIndex2]] = [temp[randIndex2], temp[randIndex1]];
+        }
+
+        if (population.indexOf(temp) === -1)
+        {
+            population.push(temp);
         }
     }
 }
@@ -150,25 +157,125 @@ function mutation(individ)
     return individ;
 }
 
+function getWayLength(individ)
+{
+    len = 0;
+
+    for (let i = 1; i < individ.length; i++)
+    {
+        deltaX = points[individ[i]][0] - points[individ[i-1]][0];
+        deltaY = points[individ[i]][1] - points[individ[i-1]][1];
+        len += Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2))
+    }
+
+    deltaX = points[0][0] - points[individ[0]][0];
+    deltaY = points[0][1] - points[individ[0]][1];
+    len += Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
+
+    deltaX = points[0][0] - points[individ[individ.length-1]][0];
+    deltaY = points[0][1] - points[individ[individ.length-1]][1];
+    len += Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
+
+    return len;
+}
+
+function drawWay(way)
+{
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    for (let i = 0; i < points.length; i++)
+    {
+        ctx.fillStyle = "black";
+		ctx.fillRect(points[i][0]-5, points[i][1]-5, widthOfPoint, heightOfPoint);
+    }
+
+    ctx.beginPath();
+    ctx.moveTo(points[0][0],points[0][1]);
+    ctx.strokeStyle = "red";
+    ctx.lineWidth = 3;
+
+    for (let i = 0; i < way.length; i++) 
+    {
+        ctx.lineTo(points[way[i]][0],points[way[i]][1]);
+        ctx.stroke();
+    }
+
+    ctx.lineTo(points[0][0],points[0][1]);
+    ctx.stroke();
+}
+
 function algorithm()
 {
     createStartPopulation();
 
-    randIndex1 = Math.floor(Math.random() * sizeOfPopulation);
-    randIndex2 = Math.floor(Math.random() * sizeOfPopulation);
-
-    newIndivid = crossing(population[randIndex1], population[randIndex2]);
-
-    if (Math.random() > mutationChance)
+    randIndex1 = Math.floor(Math.random() * population.length);
+    min = [];
+    for (let i = 0; i < points.length - 1; i++)
     {
-        newIndivid = mutation(newIndivid);
+        min[i] = population[randIndex1][i];
     }
 
-    population.push(newIndivid);
+    minLen = Infinity;
+    maxLen = -Infinity;
 
-    // for (let i = 0; i < sizeOfPopulation; i++)
-    // {
+    max = [];
 
-    // }
+    numOfIteration = 0;
+    intervalId = setInterval(() =>
+    {
+        console.log("№",numOfIteration);
+        if (numOfIteration < countOfIterations)
+        {
+            newIndivid = [];
 
+            do
+            {
+                randIndex2 = Math.floor(Math.random() * population.length);
+
+                newIndivid = crossing(min, population[randIndex2]);
+                
+                if (Math.random() > mutationChance)
+                {
+                    newIndivid = mutation(newIndivid);
+                }
+            } while(population.indexOf(newIndivid) !== -1)
+
+            population.push(newIndivid);
+
+            
+            for (let i = 0; i < population.length; i++)
+            {
+                len = getWayLength(population[i]);
+        
+                if (len < minLen)
+                {
+                    minLen = len;
+                    for (let j = 0; j < points.length - 1; j++)
+                    {
+                        min[j] = population[i][j];
+                    }
+                }
+        
+                if (len > maxLen)
+                {
+                    maxLen = len;
+                    for (let j = 0; j < points.length - 1; j++)
+                    {
+                        max[j] = population[i][j];
+                    }
+                }
+            }
+        
+            population = population.filter(function(f){if (population.indexOf(f) != population.indexOf(max)) return f});
+
+            drawWay(min);
+        }
+        else
+        {
+            clearInterval(intervalId);
+            isAlgWorksNow = false;
+        }
+        numOfIteration++;
+    }, 1);
 }
