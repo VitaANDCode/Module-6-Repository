@@ -1,11 +1,10 @@
-// Обработчик кликов
-var size;				// размер таблицы
-var table_matrix = [];	//матричный вид таблицы
+var size;
+var table_matrix = [];
 var gray_list = [];
 var green_list = [];
 
-var nx, ny, fx, fy, x, y; // координаты начала, конца, курентовые координаты
-var start_id, finish_id;  // номер старта и конца
+var nx, ny, fx, fy, x, y;
+var start_id, finish_id;
 
 var code_of_button;
 var isThereStart = false;
@@ -29,7 +28,7 @@ document.addEventListener('click', function(elem)
 			table_matrix[i] = [];
 			for (let j = 0; j < size; j++)
 			{
-				table_matrix[i][j] = 'void';	// пустота
+				table_matrix[i][j] = 'void';
 			}
 		}
 
@@ -118,10 +117,10 @@ document.addEventListener('click', function(elem)
 	if (elem.target.id == 'crt_route' && isThereStart == true && isThereFinish == true)	// если нажали "построить маршрут"
 	{
 		
-		let openList = [];		//открытый список
-		let closedList = [];	//закрытый список
+		let openList = [];		  //открытый список
+		let closedList = [];	  //закрытый список
 		let route_matrix = [];	//матрица стрелок
-		let current_td = [];	//текущая клетка
+		let current_td = [];	  //текущая клетка
 
 		document.querySelector('#set_start_btn').setAttribute('disabled', '');
 		document.querySelector('#set_finish_btn').setAttribute('disabled', '');
@@ -142,7 +141,7 @@ document.addEventListener('click', function(elem)
 		for (let i = 0; i < size; i++)	// создание матрицы стрелок
 			route_matrix[i] = [];
 
-		openList = [];					// создание открытого и закрытого списков
+		openList = [];	// создание открытого и закрытого списков
 		closedList = [];
 
 		nx = Math.floor(start_id/size);	// вычисление координат начала и конца
@@ -150,7 +149,7 @@ document.addEventListener('click', function(elem)
 		fx = Math.floor(finish_id/size);
 		fy = finish_id % size;
 
-		current_td = [nx, ny, Math.abs(nx - fx)+Math.abs(ny - fy)];		// рассматриваемая ячейка
+		current_td = [nx, ny, Math.abs(nx - fx)+Math.abs(ny - fy)];	// рассматриваемая ячейка
 		openList.push(current_td);	// заносим в открытый список стартовую точку
 		
 		// пока список не пуст или мы не пришли к финишу
@@ -206,6 +205,7 @@ document.addEventListener('click', function(elem)
 				{
 					let i = fx;
 					let j = fy;
+					
 					// цикл для отображения итогового маршрута
 					while (!(i == nx && j == ny))
 					{
