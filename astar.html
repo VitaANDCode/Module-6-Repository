@@ -1,42 +1,41 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-	<!-- Кодировка -->
 	<meta charset="UTF-8">
-	<!-- Стили-->
 	<link rel="stylesheet" href="css/astar.css">
-	<!-- Иконка сайта-->
   <link rel="shortcut icon" href="img/icon.ico" type="image/x-icon">
-	<!-- Подключение шрифтов -->
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap" rel="stylesheet">
 	<meta name="description" content="Module 6. Web-developing.">
 	<meta name="keywords" content="html, webdev, site, css, js, algorithms">
 	<meta name="author" content="Belozerov Vyacheslav, Modin Aleksandr, Nizamutdinov Victor">
-	<!-- Вкладка -->
   <title>Module 6 | A-STAR</title>
 </head>
 <body>
+	<div id="background">
+		<img src="img/background.jpg" class="stretch" alt="" />
+	</div>
+
 	<div class="return_container">
 		<a href="index.html" class="return_button">Возврат на главную</a>
 	</div>
 	<main>
 		<h1 class="main-header">Алгоритм a-star</h1>
-		<section class="buttons">
+		<section class="input-place">
 			<form>
 				<div>
 					<label for="size_table">Введите размер таблицы</label>
-					<input type="number" min=1 id="size_table" placeholder="Значение от 3 до 35" class="main-input">
+					<input type="number" min=1 id="size_table" placeholder="Значение от 3 до 35" class="control-input">
 				</div>
-				<div class="btn-container">
-					<input type="button" value="Создать таблицу" id="crt_btn" class="main-btn">
-					<input type="button" value="Установить стартовую точку" id="set_start_btn" onclick="code_of_button = 'start'" class="main-btn">
-					<input type="button" value="Установить конечную точку" id="set_finish_btn" onclick="code_of_button = 'finish'" class="main-btn">
-					<input type="button" value="Поставить стенки" id="set_wall_btn" onclick="code_of_button = 'wall'" class="main-btn">
-					<input type="button" value="Построить маршрут" id = "crt_route" class="main-btn">
-					<input type="button" value="Очистить ячейку" id="reset_td" onclick="code_of_button = 'void'" class="main-btn">
-					<input type="reset" value="Сбросить" id="reset_table" class="main-btn">
+				<div class="control-buttons">
+					<input type="button" value="Создать таблицу" id="crt_btn" class="control-button">
+					<input type="button" value="Установить стартовую точку" id="set_start_btn" onclick="code_of_button = 'start'" class="control-button">
+					<input type="button" value="Установить конечную точку" id="set_finish_btn" onclick="code_of_button = 'finish'" class="control-button">
+					<input type="button" value="Поставить стенки" id="set_wall_btn" onclick="code_of_button = 'wall'" class="control-button">
+					<input type="button" value="Построить маршрут" id = "crt_route" class="control-button">
+					<input type="button" value="Очистить ячейку" id="reset_td" onclick="code_of_button = 'void'" class="control-button">
+					<input type="reset" value="Сбросить" id="reset_table" class="control-button">
 				</div>
 			</form>
 		</section>
