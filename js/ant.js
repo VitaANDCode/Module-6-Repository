@@ -34,12 +34,20 @@ canvas.onmousemove = function() // записываем координаты к�
 
 canvas.onmousedown = function() // рисуем квадратики при клике 
 {
+	for (let i = 0; i < points.length; i++)
+	{
+		if (points[i][0] == x && points[i][1] == y)
+		{
+			alert("Точка в этом месте поставлена");
+			return 0;
+		}
+	}
 	if (opportunityToDrawPoints)
 	{
 		document.getElementById("launch_button").removeAttribute("disabled", "");
 		ctx.fillStyle = "black";
-		ctx.fillRect(x, y, widthOfPoint, heightOfPoint);
-		points.push([x+5,y+5]);
+		ctx.fillRect(x-5, y-5, widthOfPoint, heightOfPoint);
+		points.push([x,y]);
 	}
 }
 
@@ -238,7 +246,7 @@ function drawResultWay(matrix)
 		
 		currentPoint = 0;
 
-		while (openList.length != 0) // Проход муравья
+		while (openList.length != 0) // Проход контрольного муравья для отрисовки лучшего найденного пути
 		{
 			let wishes = [];
 			let sum = 0;

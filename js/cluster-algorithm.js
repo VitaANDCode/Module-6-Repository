@@ -21,8 +21,8 @@ canvas.onmousemove = function() // записываем координаты к�
 canvas.onmousedown = function() // рисуем квадратики при клике 
 {
     ctx.fillStyle = "black";
-    ctx.fillRect(x, y, widthOfPoint, heightOfPoint);
-    points.push([x+5,y+5]);
+    ctx.fillRect(x-5, y-5, widthOfPoint, heightOfPoint);
+    points.push([x,y]);
 }
 
 function algorithm()
@@ -86,6 +86,7 @@ function algorithm()
             else
             {
                 centroids[numOfCluster] = [Math.floor(Math.random() * canvas.width), Math.floor(Math.random() * canvas.height)];
+                change = true;
             }
         }
     }
@@ -114,7 +115,7 @@ document.addEventListener("click", function(el){
     if (el.target.id == "launch")
     {
         let countOfClusters = document.getElementById("countOfClusters_btn").value;
-        if (isNaN(countOfClusters) || (!countOfClusters) || !(countOfClusters > 0))
+        if (isNaN(countOfClusters) || (!countOfClusters) || !(countOfClusters > 0) || (points.length < countOfClusters))
         {
             alert("Некорректный ввод!");
         }
