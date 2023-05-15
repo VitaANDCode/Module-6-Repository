@@ -1,18 +1,18 @@
-var size;
-var table_matrix = [];
-var gray_list = [];
-var green_list = [];
+let size;
+let table_matrix = [];
+let gray_list = [];
+let green_list = [];
 
-var nx, ny, fx, fy, x, y;
-var start_id, finish_id;
+let nx, ny, fx, fy, x, y;
+let start_id, finish_id;
 
-var code_of_button;
-var isThereStart = false;
-var isThereFinish = false;
+let code_of_button;
+let isThereStart = false;
+let isThereFinish = false;
 
 document.addEventListener('click', function(elem) 
 {
-	if (elem.target.id == 'crt_btn')
+	if (elem.target.id === 'crt_btn')
 	{
 		size = document.getElementById("size_table").value;
 		if (isNaN(size) || !size || !(size > 2 && size < 36))
@@ -21,7 +21,7 @@ document.addEventListener('click', function(elem)
 			return;
 		}
 
-		var parrent = document.querySelector('.table-map');
+		let parrent = document.querySelector('.table-map');
 
 		for (let i = 0; i < size; i++)
 		{
@@ -34,13 +34,13 @@ document.addEventListener('click', function(elem)
 
 		
 
-		var table = document.createElement('table');
+		let table = document.createElement('table');
 		table.setAttribute('id', 'astar_table');
 		for (let i = 0; i < size; i++)
 		{
-			var tr = document.createElement('tr');
+			let tr = document.createElement('tr');
 			for (let j = 0; j < size; j++) {
-				var td = document.createElement('td');
+				let td = document.createElement('td');
 				td.setAttribute("id", i*size+j);
 				td.className = 'table-item';
 				td.setAttribute('style', 'background-color: white');
@@ -51,61 +51,61 @@ document.addEventListener('click', function(elem)
 		parrent.appendChild(table);
 		elem.target.setAttribute('disabled', '');
 	}
-	if (elem.target.className == 'table-item')
+	if (elem.target.className === 'table-item')
 	{
 		let td_id = elem.target.id;
 		let td_x = Math.floor(td_id/size);
 		let td_y = td_id % size;
-		if (code_of_button == 'wall') 
+		if (code_of_button === 'wall') 
 		{
 			elem.target.setAttribute('style', 'background-color: purple');
 			
-			if (table_matrix[td_x][td_y] == 'finish') {
+			if (table_matrix[td_x][td_y] === 'finish') {
 				isThereFinish = false;
 			}
 	
-			else if (table_matrix[td_x][td_y] == 'start') {
+			else if (table_matrix[td_x][td_y] === 'start') {
 				isThereStart = false;
 			}
 
 			table_matrix[td_x][td_y] = 'wall';	// стена
 		}
 
-		else if (code_of_button == 'start' && isThereStart == false)
+		else if (code_of_button === 'start' && isThereStart === false)
 		{
 			elem.target.setAttribute('style', 'background-color: blue');
 
 			start_id = elem.target.id;
 			isThereStart = true;
 
-			if (table_matrix[td_x][td_y] == 'finish') {
+			if (table_matrix[td_x][td_y] === 'finish') {
 				isThereFinish = false;
 			}
 
 			table_matrix[td_x][td_y] = 'start';	// начало
 		}
 
-		else if (code_of_button == 'finish' && isThereFinish == false)
+		else if (code_of_button === 'finish' && isThereFinish === false)
 		{
 			elem.target.setAttribute('style', 'background-color: red');
 
 			finish_id = elem.target.id;
 			isThereFinish = true;
 
-			if (table_matrix[td_x][td_y] == 'start') {
+			if (table_matrix[td_x][td_y] === 'start') {
 				isThereStart = false;
 			}
 
 			table_matrix[td_x][td_y] = 'finish';	// конец
 		}
 
-		else if (code_of_button == 'void')
+		else if (code_of_button === 'void')
 		{
-			if (table_matrix[td_x][td_y] == 'finish') {
+			if (table_matrix[td_x][td_y] === 'finish') {
 				isThereFinish = false;
 			}
 	
-			else if (table_matrix[td_x][td_y] == 'start') {
+			else if (table_matrix[td_x][td_y] === 'start') {
 				isThereStart = false;
 			}
 	
@@ -114,7 +114,7 @@ document.addEventListener('click', function(elem)
 		}
 	}	
 
-	if (elem.target.id == 'crt_route' && isThereStart == true && isThereFinish == true)	// если нажали "построить маршрут"
+	if (elem.target.id === 'crt_route' && isThereStart === true && isThereFinish === true)	// если нажали "построить маршрут"
 	{
 		
 		let openList = [];		  //открытый список
@@ -133,7 +133,7 @@ document.addEventListener('click', function(elem)
 		{
 			for (let j = 0; j < size; j++)
 			{
-				if (table_matrix[i][j] == 'gray' || table_matrix[i][j] == 'green')
+				if (table_matrix[i][j] === 'gray' || table_matrix[i][j] === 'green')
 					document.getElementById(i*size+j).setAttribute('style','background-color: white');
 			}
 		}
@@ -154,7 +154,7 @@ document.addEventListener('click', function(elem)
 		
 		// пока список не пуст или мы не пришли к финишу
 		const intervalId = setInterval(() => {
-			if (!(openList.length == 0 || (current_td[0] == fx && current_td[1] == fy)))
+			if (!(openList.length === 0 || (current_td[0] === fx && current_td[1] === fy)))
 			{
 				x = current_td[0];	// координаты рассматриваемой точки
 				y = current_td[1];
@@ -163,10 +163,10 @@ document.addEventListener('click', function(elem)
 				{
 					for (let j = -1; j < 2; j++)
 					{
-						if ((size > x + i && x + i >= 0) && (size > y + j && y + j >= 0) && table_matrix[x + i][y + j] != "wall" && closedList.indexOf((x+i)*size+y + j) == -1 && !(i == 0 && j == 0))
+						if ((size > x + i && x + i >= 0) && (size > y + j && y + j >= 0) && table_matrix[x + i][y + j] != "wall" && closedList.indexOf((x+i)*size+y + j) === -1 && !(i === 0 && j === 0))
 						{
 							let cost;
-							if (i == 0 || j == 0)
+							if (i === 0 || j === 0)
 								cost = 10;
 							else
 								cost = 14;
@@ -201,13 +201,13 @@ document.addEventListener('click', function(elem)
 				}
 			}
 			else {
-				if (current_td[0] == fx && current_td[1] == fy)
+				if (current_td[0] === fx && current_td[1] === fy)
 				{
 					let i = fx;
 					let j = fy;
 					
 					// цикл для отображения итогового маршрута
-					while (!(i == nx && j == ny))
+					while (!(i === nx && j === ny))
 					{
 						let temp_i = i, temp_j = j;
 						i = route_matrix[temp_i][temp_j][0];
@@ -235,7 +235,7 @@ document.addEventListener('click', function(elem)
 		}, 150);
 	}
 
-	if (elem.target.id == 'reset_table')
+	if (elem.target.id === 'reset_table')
 	{
 		isThereStart = false;
 		isThereFinish = false;

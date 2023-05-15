@@ -1,16 +1,16 @@
-var canvas = document.getElementById("canvas");
-var ctx = canvas.getContext('2d');
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext('2d');
 ctx.fillStyle = "white";
 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-var x, y;
-var widthOfPoint = 10;
-var heightOfPoint = widthOfPoint;
-var points = [];
-var clusters = [];
-var centroids = [];
+let x, y;
+const widthOfPoint = 10;
+const heightOfPoint = widthOfPoint;
+let points = [];
+let clusters = [];
+let centroids = [];
 
-var change = true;
+let change = true;
 
 canvas.onmousemove = function() // записываем координаты курсора мыши
 {
@@ -112,14 +112,14 @@ function algorithm()
 }
 
 document.addEventListener("click", function(el){
-    if (el.target.id == "launch")
+    if (el.target.id === "launch")
     {
         let countOfClusters = document.getElementById("countOfClusters_btn").value;
         if (isNaN(countOfClusters) || (!countOfClusters) || !(countOfClusters > 0) || (points.length < countOfClusters))
         {
             alert("Некорректный ввод!");
         }
-        else if (points.length == 0)
+        else if (points.length === 0)
         {
             alert("Поставьте точки!");
         }
@@ -128,7 +128,7 @@ document.addEventListener("click", function(el){
             algorithm();
         }
     }
-    else if (el.target.id == "clear_btn")
+    else if (el.target.id === "clear_btn")
     {
         points = [];
         centroids = [];
