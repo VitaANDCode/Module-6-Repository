@@ -19,7 +19,7 @@ var opportunityToDrawPoints = true;
 
 var intervalId;
 
-var canvas = document.getElementById("canvas");
+var canvas = document.getElementById("paint_place");
 var ctx = canvas.getContext('2d');
 ctx.fillStyle = "white";
 ctx.fillRect(0, 0, canvas.width, canvas.height);
