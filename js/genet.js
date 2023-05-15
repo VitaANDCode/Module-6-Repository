@@ -4,23 +4,29 @@ const heightOfPoint = widthOfPoint;
 let points = [];
 let population = [];
 let temp = [];
+let lengths = [];
 
-let newIndivid;
+let index1;
+let index2;
+let newIndivid1;
+let newIndivid2;
 let closedList;
 let randIndex1;
 let randIndex2;
 let splitIndex;
 let numOfIteration;
+let countOfMutations = 1;
 
-const mutationChance = 0.4;
-const countOfIterations = 10000;
+let mutationChance = 0.4;
+const countOfIterations = 20000;
 let sizeOfPopulation;
 let countOfSwaps; 
 
-let min = [], max = [];
-let minLen, maxLen, len;
+let min = [];
+let len;
 let deltaX, deltaY;
 
+let change = false;
 let isAlgWorksNow = false;
 let opportunityToDrawPoints = true;
 
@@ -77,7 +83,7 @@ clear_btn.onmousedown = function()
 
 function createStartPopulation()
 {
-    sizeOfPopulation = points.length * (points.length - 1);
+    sizeOfPopulation = (points.length - 1) * (points.length - 2) - 2;
     countOfSwaps = sizeOfPopulation;
     population = [];
     population[0] = [];
@@ -86,7 +92,7 @@ function createStartPopulation()
     {
         population[0][i-1] = i;
     }
-    
+
     while (population.length < sizeOfPopulation)
     {
         temp = [];
@@ -102,7 +108,17 @@ function createStartPopulation()
             [temp[randIndex1], temp[randIndex2]] = [temp[randIndex2], temp[randIndex1]];
         }
 
-        if (population.indexOf(temp) === -1)
+        change = true;
+        for (let i = 0; i < population.length; i++)
+        {
+            if (JSON.stringify(temp) === JSON.stringify(population[i]))
+            {
+                    change = false;
+                    break;
+            }
+        }
+
+        if (change)
         {
             population.push(temp);
         }
@@ -112,12 +128,21 @@ function createStartPopulation()
 function crossing(parrent1, parrent2)
 {
     splitIndex = Math.floor(Math.random() * (points.length - 1));
-    newIndivid = [];
+    let newIndivid = [];
     closedList = [];
 
     for (let i = 0; i < splitIndex; i++)
     {
-        if (closedList.indexOf(parrent1[i]) === -1)
+        change = true;
+        for (let j = 0; j < closedList.length; j++)
+        {
+            if (JSON.stringify(parrent1[i]) === JSON.stringify(closedList[j]))
+            {
+                change = false;
+                break;
+            }
+        }
+        if (change)
         {
             newIndivid.push(parrent1[i]);
             closedList.push(parrent1[i]);
@@ -127,7 +152,16 @@ function crossing(parrent1, parrent2)
 
     for (let i = splitIndex; i < points.length - 1; i++)
     {
-        if (closedList.indexOf(parrent2[i]) === -1)
+        change = true;
+        for (let j = 0; j < closedList.length; j++)
+        {
+            if (JSON.stringify(parrent2[i]) === JSON.stringify(closedList[j]))
+            {
+                change = false;
+                break;
+            }
+        }
+        if (change)
         {
             newIndivid.push(parrent2[i]);
             closedList.push(parrent2[i]);
@@ -136,7 +170,16 @@ function crossing(parrent1, parrent2)
 
     for (let i = splitIndex; newIndivid.length < points.length - 1; i++)
     {
-        if (closedList.indexOf(parrent1[i]) === -1)
+        change = true;
+        for (let j = 0; j < closedList.length; j++)
+        {
+            if (JSON.stringify(parrent1[i]) === JSON.stringify(closedList[j]))
+            {
+                change = false;
+                break;
+            }
+        }
+        if (change)
         {
             newIndivid.push(parrent1[i]);
             closedList.push(parrent1[i]);
@@ -210,66 +253,76 @@ function algorithm()
     createStartPopulation();
 
     randIndex1 = Math.floor(Math.random() * population.length);
-    min = [];
-    for (let i = 0; i < points.length - 1; i++)
-    {
-        min[i] = population[randIndex1][i];
-    }
-
-    minLen = Infinity;
-    maxLen = -Infinity;
-
-    max = [];
 
     numOfIteration = 0;
     intervalId = setInterval(() =>
     {
-        console.log("№",numOfIteration);
         if (numOfIteration < countOfIterations)
         {
-            newIndivid = [];
+            newIndivid1 = [];
+            newIndivid2 = [];
 
+            change = false;
             do
             {
-                randIndex2 = Math.floor(Math.random() * population.length);
+                index1 = 0;
+                index2 = Math.floor(Math.random() * (population.length - 1))
 
-                newIndivid = crossing(min, population[randIndex2]);
+                if (numOfIteration == 3500)
+                {
+                    mutationChance = 0.66;
+                    countOfMutations = 3;
+                }
+
+                newIndivid1 = crossing(population[index1], population[index2]);
+                newIndivid2 = crossing(population[index2], population[index1]);
                 
-                if (Math.random() > mutationChance)
+                for (let i = 0; i < countOfMutations; i++) 
                 {
-                    newIndivid = mutation(newIndivid);
+                    if (Math.random() > mutationChance)
+                    {
+                        newIndivid1 = mutation(newIndivid1);
+                        newIndivid2 = mutation(newIndivid2);
+                    }
                 }
-            } while(population.indexOf(newIndivid) !== -1)
 
-            population.push(newIndivid);
+                change = true;
+                for (let i = 0; i < population.length; i++)
+                {
+                    if (JSON.stringify(newIndivid1) === JSON.stringify(population[i]))
+                    {
+                        change = false;
+                        break;
+                    }
+                }
+                if (change)
+                {
+                    for (let i = 0; i < population.length; i++)
+                    {
+                        if (JSON.stringify(newIndivid2) === JSON.stringify(population[i]))
+                        {
+                            change = false;
+                            break;
+                        }
+                    }
+                }
+                
+            } while(!change)
 
-            
-            for (let i = 0; i < population.length; i++)
+            population.push(newIndivid1);
+            population.push(newIndivid2);
+
+            population.sort(function(a, b)
             {
-                len = getWayLength(population[i]);
-        
-                if (len < minLen)
-                {
-                    minLen = len;
-                    for (let j = 0; j < points.length - 1; j++)
-                    {
-                        min[j] = population[i][j];
-                    }
-                }
-        
-                if (len > maxLen)
-                {
-                    maxLen = len;
-                    for (let j = 0; j < points.length - 1; j++)
-                    {
-                        max[j] = population[i][j];
-                    }
-                }
-            }
-        
-            population = population.filter(function(f){if (population.indexOf(f) != population.indexOf(max)) return f});
+                return getWayLength(a) - getWayLength(b);
+            });
+            
+            index1 = 0;
+            index2 = Math.floor(Math.random() * population.length);
+            population.pop();
+            population.pop();
 
-            drawWay(min);
+            drawWay(population[index1]);
         }
         else
         {
@@ -277,5 +330,7 @@ function algorithm()
             isAlgWorksNow = false;
         }
         numOfIteration++;
+
+        console.log("№",numOfIteration);
     }, 1);
 }
